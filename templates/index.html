@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personality Insights - Introvert/Extrovert Predictor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --accent-color: #f093fb;
+            --text-primary: #e2e8f0;
+            --text-secondary: #a0aec0;
+            --background: #0f1419;
+            --card-bg: rgba(30, 41, 59, 0.9);
+            --input-bg: rgba(51, 65, 85, 0.8);
+            --shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            --shadow-hover: 0 30px 80px rgba(0, 0, 0, 0.6);
+            --border-color: rgba(102, 126, 234, 0.3);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f1419 0%, #1a202c 50%, #2d3748 100%);
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+            color: var(--text-primary);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            text-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            font-weight: 300;
+        }
+
+        .form-container {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            animation: fadeInUp 1s ease-out 0.3s both;
+            transition: all 0.3s ease;
+        }
+
+        .form-container:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-5px);
+        }
+
+        .form-grid {
+            display: grid;
+            gap: 25px;
+        }
+
+        .input-group {
+            position: relative;
+            animation: slideInLeft 0.6s ease-out;
+        }
+
+        .input-group:nth-child(even) {
+            animation: slideInRight 0.6s ease-out;
+        }
+
+        label {
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        label i {
+            margin-right: 10px;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            width: 20px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 1rem;
+            background: var(--input-bg);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
+            transform: translateY(-2px);
+            background: rgba(51, 65, 85, 1);
+        }
+
+        input:hover, select:hover {
+            border-color: rgba(102, 126, 234, 0.5);
+            background: rgba(51, 65, 85, 0.9);
+        }
+
+        select {
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23667eea' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 12px center;
+            background-repeat: no-repeat;
+            background-size: 16px;
+            appearance: none;
+        }
+
+        select option {
+            background: var(--input-bg);
+            color: var(--text-primary);
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 18px 40px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            margin-top: 20px;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            border-radius: 16px;
+            font-size: 1.3rem;
+            font-weight: 500;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.3);
+            animation: bounceIn 0.6s ease-out;
+        }
+
+        /* Meteor Shower Background */
+        #meteors {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .meteor {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: linear-gradient(45deg, #fff, #667eea, #f093fb);
+            border-radius: 50%;
+            box-shadow: 
+                0 0 10px #fff,
+                0 0 20px #667eea,
+                0 0 30px #f093fb;
+            animation: meteor-fall linear infinite;
+        }
+
+        .meteor::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+            transform: rotate(45deg);
+            transform-origin: right center;
+        }
+
+        .meteor::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 80px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.6), transparent);
+            transform: rotate(45deg);
+            transform-origin: right center;
+        }
+
+        @keyframes meteor-fall {
+            0% {
+                transform: translateX(-100px) translateY(-100px);
+                opacity: 1;
+            }
+            70% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(calc(100vw + 100px)) translateY(calc(100vh + 100px));
+                opacity: 0;
+            }
+        }
+
+        /* Stars background */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            animation: star-twinkle 3s infinite;
+        }
+
+        @keyframes star-twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: scale(0.3); }
+            50% { opacity: 1; transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2.5rem; }
+            .form-container { padding: 25px; }
+            body { padding: 15px; }
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(51, 65, 85, 0.6);
+            border-radius: 2px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        input::placeholder {
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Stars Background -->
+    <div class="stars" id="stars"></div>
+    
+    <!-- Meteor Shower -->
+    <div id="meteors"></div>
+
+    <div class="container">
+        <div class="header">
+            <h1>Personality Insights</h1>
+            <p>Discover your introvert/extrovert tendencies through advanced analysis</p>
+        </div>
+
+        <div class="form-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <form action="/predict" method="post" id="personalityForm">
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label for="Time_spent_Alone">
+                            <i class="fas fa-home"></i>
+                            Time Spent Alone (hours per day)
+                        </label>
+                        <input type="number" id="Time_spent_Alone" name="Time_spent_Alone" step="0.1" required min="0" max="24">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="Stage_fear">
+                            <i class="fas fa-microphone"></i>
+                            Stage Fear
+                        </label>
+                        <select id="Stage_fear" name="Stage_fear" required>
+                            <option value="">Select an option</option>
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="Social_event_attendance">
+                            <i class="fas fa-calendar-alt"></i>
+                            Social Event Attendance (events per month)
+                        </label>
+                        <input type="number" id="Social_event_attendance" name="Social_event_attendance" step="0.1" required min="0">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="Going_outside">
+                            <i class="fas fa-walking"></i>
+                            Going Outside (times per week)
+                        </label>
+                        <input type="number" id="Going_outside" name="Going_outside" step="0.1" required min="0">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="Drained_after_socializing">
+                            <i class="fas fa-battery-quarter"></i>
+                            Drained After Socializing
+                        </label>
+                        <select id="Drained_after_socializing" name="Drained_after_socializing" required>
+                            <option value="">Select an option</option>
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="Friends_circle_size">
+                            <i class="fas fa-users"></i>
+                            Friends Circle Size (number of close friends)
+                        </label>
+                        <input type="number" id="Friends_circle_size" name="Friends_circle_size" step="0.1" required min="0">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="Post_frequency">
+                            <i class="fas fa-share-alt"></i>
+                            Post Frequency (posts per week on social media)
+                        </label>
+                        <input type="number" id="Post_frequency" name="Post_frequency" step="0.1" required min="0">
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-brain" style="margin-right: 10px;"></i>
+                    Analyze Personality
+                </button>
+            </form>
+
+            {% if prediction_text %}
+            <div class="result">
+                <i class="fas fa-lightbulb" style="margin-right: 10px;"></i>
+                {{ prediction_text }}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        // Create stars background
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const numberOfStars = 100;
+
+            for (let i = 0; i < numberOfStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Create meteor shower
+        function createMeteor() {
+            const meteorsContainer = document.getElementById('meteors');
+            const meteor = document.createElement('div');
+            meteor.className = 'meteor';
+            
+            // Random starting position (top and left edges)
+            meteor.style.left = Math.random() * -100 + 'px';
+            meteor.style.top = Math.random() * -100 + 'px';
+            
+            // Random animation duration and delay
+            const duration = Math.random() * 3 + 2; // 2-5 seconds
+            meteor.style.animationDuration = duration + 's';
+            meteor.style.animationDelay = Math.random() * 2 + 's';
+            
+            meteorsContainer.appendChild(meteor);
+            
+            // Remove meteor after animation
+            setTimeout(() => {
+                meteor.remove();
+            }, (duration + 2) * 1000);
+        }
+
+        // Initialize meteor shower
+        function startMeteorShower() {
+            setInterval(createMeteor, 800); // Create new meteor every 800ms
+        }
+
+        // Progress bar functionality
+        const form = document.getElementById('personalityForm');
+        const progressFill = document.getElementById('progressFill');
+        const inputs = form.querySelectorAll('input, select');
+
+        function updateProgress() {
+            const totalFields = inputs.length;
+            let filledFields = 0;
+
+            inputs.forEach(input => {
+                if (input.value.trim() !== '') {
+                    filledFields++;
+                }
+            });
+
+            const progress = (filledFields / totalFields) * 100;
+            progressFill.style.width = progress + '%';
+        }
+
+        inputs.forEach(input => {
+            input.addEventListener('input', updateProgress);
+            input.addEventListener('change', updateProgress);
+        });
+
+        // Form submission animation
+        form.addEventListener('submit', function(e) {
+            const submitBtn = form.querySelector('.submit-btn');
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right: 10px;"></i>Analyzing...';
+            submitBtn.disabled = true;
+        });
+
+        // Enhanced input interactions
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.02)';
+            });
+
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
+        });
+
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', function() {
+            createStars();
+            startMeteorShower();
+            updateProgress();
+        });
+    </script>
+</body>
+</html>
